@@ -310,6 +310,7 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
         
         attributes[NSAttributedString.Key.font] = font!
         attributes[NSAttributedString.Key.foregroundColor] = textColor
+        attributes[NSAttributedString.Key.underlineStyle] = NSNumber(value: NSUnderlineStyle.init().rawValue)
         mutAttrString.addAttributes(attributes, range: range)
         
         attributes[NSAttributedString.Key.foregroundColor] = mentionColor
@@ -319,7 +320,9 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
             switch type {
             case .mention: attributes[NSAttributedString.Key.foregroundColor] = mentionColor
             case .hashtag: attributes[NSAttributedString.Key.foregroundColor] = hashtagColor
-            case .url: attributes[NSAttributedString.Key.foregroundColor] = URLColor
+            case .url:
+                attributes[NSAttributedString.Key.foregroundColor] = URLColor
+                attributes[NSAttributedString.Key.underlineStyle] = NSNumber(value: NSUnderlineStyle.single.rawValue)
             case .custom: attributes[NSAttributedString.Key.foregroundColor] = customColor[type] ?? defaultCustomColor
             }
             
