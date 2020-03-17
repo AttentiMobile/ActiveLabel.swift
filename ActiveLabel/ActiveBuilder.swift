@@ -1,3 +1,17 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
 //  ActiveBuilder.swift
 //  ActiveLabel
@@ -36,8 +50,10 @@ struct ActiveBuilder {
 
             guard let maxLength = maximumLength, word.count > maxLength else {
                 let range = maximumLength == nil ? match.range : (text as NSString).range(of: word)
+                let startOfRange = match.range.upperBound - range.length
+                let rangeFix = NSRange(location: startOfRange, length: range.length)
                 let element = ActiveElement.create(with: type, text: word)
-                elements.append((range, element, type))
+                elements.append((rangeFix, element, type))
                 continue
             }
 
