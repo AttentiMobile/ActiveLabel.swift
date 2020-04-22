@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let customType = ActiveType.custom(pattern: "\\sare\\b") //Looks for "are"
+        let customType = ActiveType.customLastString(pattern: "\\sare\\b") //Looks for "are"
         let customType2 = ActiveType.custom(pattern: "\\sit\\b") //Looks for "it"
         let customType3 = ActiveType.custom(pattern: "\\ssupports\\b") //Looks for "supports"
 
@@ -29,7 +29,7 @@ class ViewController: UIViewController {
         label.customize { label in
             label.text = "This is a post with #multiple #hashtags and a @userhandle. Links are also supported like" +
             " this one: http://optonaut.co. Now it also supports custom patterns -> are\n\n" +
-                "Let's trim a long link: \nhttps://twitter.com/twicket_app/status/649678392372121601"
+                "Let's trim a long link: \nhttps://twitter.com/twicket_app/status/649678392372121601 are"
             label.numberOfLines = 0
             label.lineSpacing = 4
             

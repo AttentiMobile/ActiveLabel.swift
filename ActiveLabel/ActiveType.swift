@@ -13,6 +13,7 @@ enum ActiveElement {
     case hashtag(String)
     case url(original: String, trimmed: String)
     case custom(String)
+    case customLastString(String)
     
     static func create(with activeType: ActiveType, text: String) -> ActiveElement {
         switch activeType {
@@ -20,6 +21,7 @@ enum ActiveElement {
         case .hashtag: return hashtag(text)
         case .url: return url(original: text, trimmed: text)
         case .custom: return custom(text)
+        case .customLastString: return customLastString(text)
         }
     }
 }
@@ -29,6 +31,8 @@ public enum ActiveType {
     case hashtag
     case url
     case custom(pattern: String)
+    case customLastString(pattern: String)
+
     
     var pattern: String {
         switch self {
@@ -36,6 +40,7 @@ public enum ActiveType {
         case .hashtag: return RegexParser.hashtagPattern
         case .url: return RegexParser.urlPattern
         case .custom(let regex): return regex
+        case .customLastString(let regex): return regex
         }
     }
 }
@@ -47,6 +52,7 @@ extension ActiveType: Hashable, Equatable {
         case .hashtag: hasher.combine(-2)
         case .url: hasher.combine(-3)
         case .custom(let regex): hasher.combine(regex)
+        case .customLastString(let regex): hasher.combine(regex)
         }
     }
 }
@@ -57,6 +63,7 @@ public func ==(lhs: ActiveType, rhs: ActiveType) -> Bool {
     case (.hashtag, .hashtag): return true
     case (.url, .url): return true
     case (.custom(let pattern1), .custom(let pattern2)): return pattern1 == pattern2
+    case (.customLastString(let pattern1), .customLastString(let pattern2)): return pattern1 == pattern2
     default: return false
     }
 }

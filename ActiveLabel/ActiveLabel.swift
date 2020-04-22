@@ -97,6 +97,8 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
             urlTapHandler = nil
         case .custom:
             customTapHandlers[type] = nil
+        case .customLastString:
+            customLastStringTapHandlers[type] = nil
         }
     }
     
@@ -213,6 +215,7 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
             case .hashtag(let hashtag): didTapHashtag(hashtag)
             case .url(let originalURL, _): didTapStringURL(originalURL)
             case .custom(let element): didTap(element, for: selectedElement.type)
+            case .customLastString(let element): didTap(element, for: selectedElement.type)
             }
             
             let when = DispatchTime.now() + Double(Int64(0.25 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
@@ -241,6 +244,8 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
     internal var hashtagTapHandler: ((String) -> ())?
     internal var urlTapHandler: ((URL) -> ())?
     internal var customTapHandlers: [ActiveType : ((String) -> ())] = [:]
+    internal var customLastStringTapHandlers: [ActiveType : ((String) -> ())] = [:]
+
     
     fileprivate var mentionFilterPredicate: ((String) -> Bool)?
     fileprivate var hashtagFilterPredicate: ((String) -> Bool)?
@@ -324,6 +329,7 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
                 attributes[NSAttributedString.Key.foregroundColor] = URLColor
                 attributes[NSAttributedString.Key.underlineStyle] = NSNumber(value: NSUnderlineStyle.single.rawValue)
             case .custom: attributes[NSAttributedString.Key.foregroundColor] = customColor[type] ?? defaultCustomColor
+            case .customLastString: attributes[NSAttributedString.Key.foregroundColor] = customColor[type] ?? defaultCustomColor
             }
             
             if let highlightFont = hightlightFont {
@@ -406,6 +412,9 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
             case .custom:
                 let possibleSelectedColor = customSelectedColor[selectedElement.type] ?? customColor[selectedElement.type]
                 selectedColor = possibleSelectedColor ?? defaultCustomColor
+            case .customLastString:
+                let possibleSelectedColor = customSelectedColor[selectedElement.type] ?? customColor[selectedElement.type]
+                selectedColor = possibleSelectedColor ?? defaultCustomColor
             }
             attributes[NSAttributedString.Key.foregroundColor] = selectedColor
         } else {
@@ -415,6 +424,7 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
             case .hashtag: unselectedColor = hashtagColor
             case .url: unselectedColor = URLColor
             case .custom: unselectedColor = customColor[selectedElement.type] ?? defaultCustomColor
+            case .customLastString: unselectedColor = customColor[selectedElement.type] ?? defaultCustomColor
             }
             attributes[NSAttributedString.Key.foregroundColor] = unselectedColor
         }
