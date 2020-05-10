@@ -315,7 +315,7 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
         
         attributes[NSAttributedString.Key.font] = font!
         attributes[NSAttributedString.Key.foregroundColor] = textColor
-        attributes[NSAttributedString.Key.underlineStyle] = NSNumber(value: NSUnderlineStyle.init().rawValue)
+        attributes[NSAttributedString.Key.underlineStyle] = NSNumber(value:0)
         mutAttrString.addAttributes(attributes, range: range)
         
         attributes[NSAttributedString.Key.foregroundColor] = mentionColor
@@ -328,8 +328,14 @@ typealias ElementTuple = (range: NSRange, element: ActiveElement, type: ActiveTy
             case .url:
                 attributes[NSAttributedString.Key.foregroundColor] = URLColor
                 attributes[NSAttributedString.Key.underlineStyle] = NSNumber(value: NSUnderlineStyle.single.rawValue)
-            case .custom: attributes[NSAttributedString.Key.foregroundColor] = customColor[type] ?? defaultCustomColor
-            case .customLastString: attributes[NSAttributedString.Key.foregroundColor] = customColor[type] ?? defaultCustomColor
+            case .custom:
+                attributes[NSAttributedString.Key.foregroundColor] = customColor[type] ?? defaultCustomColor
+                attributes[NSAttributedString.Key.underlineStyle] =  NSNumber(0) //no underline
+                attributes[NSAttributedString.Key.underlineColor] = UIColor.clear
+            case .customLastString:
+                attributes[NSAttributedString.Key.foregroundColor] = customColor[type] ?? defaultCustomColor
+                attributes[NSAttributedString.Key.underlineStyle] =  NSNumber(0) //no underline
+                attributes[NSAttributedString.Key.underlineColor] = UIColor.clear
             }
             
             if let highlightFont = hightlightFont {
